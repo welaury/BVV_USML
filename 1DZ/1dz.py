@@ -19,9 +19,17 @@ print(round(df['smoke'][df['gender'] == 2].mean()/df['smoke'][df['gender'] == 1]
 print(round((df['age'][df['smoke'] == 0].median()-df['age'][df['smoke'] == 1].median())/30))
 
 #5
-df['age_years'] = round(df['age']/365).astype('int')
+df['age_years'] = (df['age'] / 365.25).round().astype('int')
 
-print(round(df[(df['age_years']>=60) & (df['age_years']<=64) & (df['ap_hi'] <= 160) & (df['ap_hi'] <= 180) & (df['cholesterol'] == 3) & (df['cardio'] == 1)].shape[0] / df['age_years'][(df['age_years']>=60) & (df['age_years']<=64) & (df['ap_hi'] < 120) & (df['cholesterol'] == 1) & (df['cardio'] == 1)].shape[0] ))
+#print(round(df[(df['age_years']>=60) & (df['age_years']<=64) & (df['ap_hi'] >= 160) & (df['ap_hi'] < 180) & (df['cholesterol'] == 3) & (df
+#['cardio'] == 1)].shape[0] / df['age_years'][(df['age_years']>=60) & (df['age_years']<=64) & (df['ap_hi'] < 120) & (df['cholesterol'] == 1) & (df
+#['cardio'] == 1)].shape[0] ))
+
+smoking_old_men = df[(df['gender'] == 2) & (df['age_years'] >= 60)
+                    & (df['age_years'] < 65) & (df['smoke'] == 1)]
+
+print(round(smoking_old_men[(smoking_old_men['cholesterol'] == 3) & (smoking_old_men['ap_hi'] >= 160) & (smoking_old_men['ap_hi'] < 180)]['cardio'].mean() / smoking_old_men[(smoking_old_men['cholesterol'] == 1) & (smoking_old_men['ap_hi'] < 120)]['cardio'].mean()))
+
 
 #6
 df['BMI'] = df['weight']/((df['height']/100)*(df['height']/100))
